@@ -1,0 +1,15 @@
+{
+    "name": "llgc/manifest",
+    "description": "LlGC > PCW",
+    "authors": [
+        {
+            "name": "Michael Jones",
+            "email": "mij@llgc.org.uk"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {"llgc\\src\\": "src/"}
+    }
+
+}
