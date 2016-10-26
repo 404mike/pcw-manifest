@@ -11,6 +11,7 @@ TRANSFORMED=$BASE"/transformed"
 HOLDING=$TRANSFORMED"/holding"
 FINAL=$TRANSFORMED"/final"
 TRASH=$FINAL"/trash"
+WEBREADY="$var/llgc_$1/web_ready"
 
 # Loop through all the iamges
 for a in $BASE"/"*.jpg
@@ -39,3 +40,10 @@ done
 
 echo "Running move script"
 $var/scripts/shell/./move.sh $1
+
+# Move final images to web_ready
+for b in $FINAL"/"*.jpg
+do
+  FILE=$(basename "$b")
+  cp $FINAL/$FILE $WEBREADY/$FILE
+done

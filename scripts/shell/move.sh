@@ -6,6 +6,7 @@
 var=$(pwd)
 
 BASE="$var/llgc_$1/temp"
+DIR="$var/llgc_$1/"
 TRANSFORMED=$BASE"/transformed"
 HOLDING=$TRANSFORMED"/holding"
 FINAL=$TRANSFORMED"/final"
@@ -43,3 +44,5 @@ done
  # replace any (1) and -001 strings in the filename
  echo "Rename files"
  rename -v 's/(.?)(\(\d\))?-(\d{3})/$1/' $FINAL/*
+
+ # cp "$FINAL/*.jpg $WEBREADY/"
