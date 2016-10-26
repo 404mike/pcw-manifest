@@ -51,7 +51,7 @@ class download_images {
       $sFile = file_get_contents($image);
 
       // set filename
-      $tempfilename = str_replace('http://dams.llgc.org.uk/iiif//image/', '', $image);
+      $tempfilename = str_replace('http://dams.llgc.org.uk/iiif/test/2.0/image/', '', $image);
 
       // set filename
       $filename = preg_replace("/(.*?)\/full\/(.*?)\,(.*?)\/0\/default\.jpg/", "$1", $tempfilename);
@@ -86,14 +86,22 @@ class download_images {
       $height = $temp['height'];
       $width  = $temp['width'];
 
+      $height = (int) $height / 4;
+      $width = (int) $width / 4;
+
+      $height = round($height);
+      $width =  round($width);
+
       // temporary
-      $height = '500';
-      $width = '500';
+      // $height = '500';
+      // $width = '500';
 
       // set the URL to the image path according to the IIIF presentation API
-      $url = str_replace('2.0', '', $id);
+      // $url = str_replace('2.0', '', $id);
 
-      $url .= '/full/' . $width . ',' . $height . '/0/default.jpg';
+      $url = $id . '/full/' . $width . ',' . $height . '/0/default.jpg';
+
+      $url = str_replace('iiif/', 'iiif/test/', $url);
 
       // add the formatted image URI to the array
       array_push($this->images, $url);

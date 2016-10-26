@@ -24,7 +24,9 @@ do
  # convert the image and set the background colour
  echo "Converting $FILE"
  #inspired by http://greyproc.blogspot.co.uk/2012/03/batch-straighteningdeskewing-and.html
- convert $a -set filename:f "%t" -background '#c7b39b' -deskew 60%  $HOLDING/%[filename:f].jpg;
+ #convert $a -set filename:f "%t" -background '#c7b39b' -deskew 60%  $HOLDING/%[filename:f].jpg;
+
+ convert $a -set filename:f "%t" -background '#000000' -deskew 60%  $HOLDING/%[filename:f].jpg;
 
  # run the multicrop script
  echo "Running crop tool"

@@ -122,15 +122,42 @@ class Generate_csv {
   {
     $dataArr = $data['metadata'];
 
+    $dataFormatted = $this->formatMetaData($dataArr);
+
+    if(isset($dataFormatted['title'])) $title = $dataFormatted['title'];
+    else $title = '';
+
+    if(isset($dataFormatted['author'])) $author = $dataFormatted['author'];
+    else $author = '';
+
+    if(isset($dataFormatted['date'])) $date = $dataFormatted['date'];
+    else $date = '';
+
+    if(isset($dataFormatted['description'])) $description = $dataFormatted['description'];
+    else $description = '';
+
+    if(isset($dataFormatted['href'])) $href = $dataFormatted['href'];
+    else $href = '';
+
+    if(isset($dataFormatted['reference'])) $reference = $dataFormatted['reference'];
+    else $reference = '';
+
+    if(isset($dataFormatted['licence_en'])) $licence_en = $dataFormatted['licence_en'];
+    else $licence_en = '';
+
+    if(isset($dataFormatted['licence_cy'])) $licence_cy = $dataFormatted['licence_cy'];
+    else $licence_cy = '';
+
+
     $arr = [
-      'title'       => $dataArr[0]['value'],
-      'author'      => $dataArr[1]['value'],
-      'date'        => $dataArr[2]['value'],
-      'description' => $dataArr[3]['value'],
-      'url'         => $this->cleanURI( $dataArr[4]['value'] ),
-      'reference'   => $dataArr[5]['value'],
-      'license_en'  => $dataArr[6]['value'][0]['@value'],
-      'license_cy'  => $dataArr[6]['value'][1]['@value'],
+      'title'       => $title,
+      'author'      => $author,
+      'date'        => $date,
+      'description' => $description,
+      'url'         => $this->cleanURI( $href ),
+      'reference'   => $reference,
+      'licence_en'  => $licence_en,
+      'licence_cy'  => $licence_cy,
 
     ];
 
@@ -140,12 +167,73 @@ class Generate_csv {
 
 
   /**
+   * 
+   *
+   */
+  private function formatMetaData($data)
+  {
+
+    $formatted = [];
+
+    foreach($data as $key => $value) {
+
+      if($value['label'][0]['@value'] == 'Title') {
+        $formatted['title'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Period') {
+        $formatted['period'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Date') {
+        $formatted['date'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Physical description') {
+        $formatted['description'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Reference') {
+        $formatted['reference'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Author') {
+        $formatted['author'] = $value['value'];
+      }        
+
+      if($value['label'][0]['@value'] == 'Permalink') {
+        $formatted['href'] = $value['value'];
+      }
+
+      if($value['label'][0]['@value'] == 'License') {
+        $formatted['licence_en'] = $value['value'][0]['@value'];
+        $formatted['licence_cy'] = $value['value'][1]['@value'];
+      }
+
+      if($value['label'][0]['@value'] == 'Repository') {
+        $formatted['repository_en'] = $value['value'][0]['@value'];
+        $formatted['repository_cy'] = $value['value'][1]['@value'];
+      }        
+
+    }
+
+    return $formatted;
+
+  }
+
+
+
+  /**
    * Cleam the HREF for the handle
    * @param string $url
    * @return string
    */
   private function cleanURI($url)
   {
+
+
+    return;
+
     // clean handle if it contains HTML
     if(preg_match('/href/', $url)) {
       $url = preg_replace("/<a href=\"(.*?)\">(.*?)<\/a>/", "$1", $url);
@@ -212,9 +300,9 @@ class Generate_csv {
     $list = $listHeader->csvHeader();
     
     if(count($items) == 1) {
-      $data = $this->addMultipartToCsv($base, $items);
-    }else{
       $data = $this->addSingleItemsToCsv($base, $items);
+    }else{
+      $data = $this->addMultipartToCsv($base, $items);
     }
 
     // loop through all the items and add them to array
@@ -223,7 +311,7 @@ class Generate_csv {
     }
         
     // write the data to the csv file      
-    $fp = fopen('llgc_' . $title . '/llgc_ '. $title . '.csv', 'w');
+    $fp = fopen('llgc_' . trim($title) . '/llgc_'. trim($title) . '.csv', 'w');
     
     echo "\nCreating CSV file\n";
 
