@@ -10,6 +10,7 @@ TRANSFORMED=$BASE"/transformed"
 HOLDING=$TRANSFORMED"/holding"
 FINAL=$TRANSFORMED"/final"
 TRASH=$FINAL"/trash"
+WEBREADY="$var/llgc_$1/web_ready"
 
 # Loop through all jpg
 for a in $FINAL/*.jpg

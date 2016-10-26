@@ -186,7 +186,7 @@ class Generate_csv {
       }
 
       if($value['label'][0]['@value'] == 'Date') {
-        $formatted['date'] = $value['value'];
+        $formatted['date'] = $this->formatDate( $value['value'] );
       }
 
       if($value['label'][0]['@value'] == 'Physical description') {
@@ -221,6 +221,15 @@ class Generate_csv {
 
   }
 
+
+  /**
+   * 
+   *
+   */
+  private function formatDate($date)
+  {
+    return preg_replace("/[^0-9]/", "", $date);
+  }
 
 
   /**
