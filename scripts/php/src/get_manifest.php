@@ -1,14 +1,15 @@
 <?php
 namespace llgc\src;
 
+
 class get_manifest {
 
-    /**
-     * Manfiest URL
-     * 
-     * @var  string
-     */
-   private $manifestURL = 'http://dams.llgc.org.uk/iiif/2.0/$LLGCID/manifest.json';
+  /**
+   * Manfiest URL
+   * 
+   * @var  string
+   */
+  private $manifestURL = 'http://dams.llgc.org.uk/iiif/2.0/$LLGCID/manifest.json';
 
 
   /**

@@ -30,7 +30,7 @@ get_images()
   php scripts/php/main.php "images " $TYPE $ID
 
   # resize the images
-  scripts/shell/transform.sh $ID
+  # scripts/shell/transform.sh $ID
 }
 
 

@@ -239,10 +239,6 @@ class Generate_csv {
    */
   private function cleanURI($url)
   {
-
-
-    return;
-
     // clean handle if it contains HTML
     if(preg_match('/href/', $url)) {
       $url = preg_replace("/<a href=\"(.*?)\">(.*?)<\/a>/", "$1", $url);
