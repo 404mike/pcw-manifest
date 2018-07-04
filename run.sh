@@ -24,7 +24,7 @@ get_images()
   # create holding directory for the images
   mkdir -p "llgc_$ID/web_ready/"
 
-  mkdir -p "llgc_$ID/temp/"
+  # mkdir -p "llgc_$ID/temp/"
 
   # Download the images
   php scripts/php/main.php "images " $TYPE $ID

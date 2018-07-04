@@ -147,8 +147,8 @@ class Merge_multiple_csv {
         $value[1], // Parent ID*
         $value[2], // Page Order*
         $value[3], // Image/File Name
-        $value[4], // Title EN
-        $value[5], // Title CY
+        str_replace([']','[ '], '', $value[4]), // Title EN
+        str_replace([']','[ '], '', $value[5]), // Title CY
         $value[6], // Description EN
         $value[7], // Description CY
         $value[8], // Item type
@@ -156,7 +156,7 @@ class Merge_multiple_csv {
         $value[10], // Tags CY
         $value[11], // Date
         $value[12], // Owner
-        $value[13], // Creator
+        'Harries, D. C., 1865-1940', // Creator
         $value[14], // Website en
         $value[15], // Website cy
         $value[16], // What facet

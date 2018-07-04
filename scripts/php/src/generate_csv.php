@@ -33,12 +33,19 @@ class Generate_csv {
     // loop through all the images
     foreach($images as $img) {
 
+      
+
+      $imageArr = str_replace('https://damsssl.llgc.org.uk/iiif/2.0/', '', $img['@id']);
+      $imgPart = explode('/', $imageArr);
+
+      // print_r($imgPart); die();
+
       $imageid  = $this->getIds($img['@id'] , 'single');
       $title    = $img['label'];
 
       $items[] = [
-        'id'    => 'llgc_' . $id . '_' . $imageid,
-        'image' => $imageid . '.jpg',
+        'id'    => 'llgc_' . $imgPart[0] . '_' . str_replace('.json','',$imgPart[2]),
+        'image' => str_replace('.json','',$imgPart[2]) . '.jpg',
         'title' => $title
       ];
 
@@ -133,8 +140,12 @@ class Generate_csv {
     if(isset($dataFormatted['date'])) $date = $dataFormatted['date'];
     else $date = '';
 
-    if(isset($dataFormatted['description'])) $description = $dataFormatted['description'];
-    else $description = '';
+    if(isset($data['description'])) {
+      $description = $data['description'];
+    }else{
+      if(isset($dataFormatted['description'])) $description = $dataFormatted['description'];
+      else $description = '';      
+    }
 
     if(isset($dataFormatted['href'])) $href = $dataFormatted['href'];
     else $href = '';
@@ -299,16 +310,26 @@ class Generate_csv {
   public function createCsv($base , $items , $title)
   {
 
+    // print_r($title);die();
+    $titleArr = str_replace('https://damsssl.llgc.org.uk/iiif/2.0/', '', $title);
+    $titlePart = explode('/', $titleArr);
+    $newTitle = $titlePart[0];
+
+    // $imageCount = 0;
+    // foreach($items as $key => $value) {
+    //   $imageCount = count($value['children']);
+    // }
+
     // Get CSV header details
     $listHeader = new csvTemplate();
 
     $list = $listHeader->csvHeader();
     
-    if(count($items) == 1) {
+    // if($imageCount == 1) {
       $data = $this->addSingleItemsToCsv($base, $items);
-    }else{
-      $data = $this->addMultipartToCsv($base, $items);
-    }
+    // }else{
+    //   $data = $this->addMultipartToCsv($base, $items);
+    // }
 
     // loop through all the items and add them to array
     foreach($data as $d) {
@@ -316,7 +337,7 @@ class Generate_csv {
     }
         
     // write the data to the csv file      
-    $fp = fopen('llgc_' . trim($title) . '/llgc_'. trim($title) . '.csv', 'w');
+    $fp = fopen('./llgc_' . trim($newTitle) . '/llgc_'. trim($newTitle) . '.csv', 'w');
     
     echo "\nCreating CSV file\n";
 
@@ -339,22 +360,32 @@ class Generate_csv {
 
     $list = [];
 
+    // print_r($items); die();
+
     foreach ($items as $item => $value) {
+
+
+
+      if(empty($base['date'])) {
+        $date = '';
+      }else{
+        $date = $base['date'] . '-01-01';
+      }
 
       array_push($list, array(
         $value['id'], // Image Identifier
         '', // Parent ID*
         '', // Page Order*
         $value['image'], // Image/File Name
-        $value['title'], // Title EN
-        $value['title'], // Title CY
-        $base['description'], // Description EN
-        $base['description'], // Description CY
+        trim($base['title']), // Title EN
+        trim($base['title']), // Title CY
+        trim($base['description']), // Description EN
+        trim($base['description']), // Description CY
         '', // Item type
         '', // Tags EN
         '', // Tags CY
-        $base['date'].'-01-01', // Date
-        '', // Owner
+        $date, // Date
+        'The National Library of Wales - Llyfrgell Genedlaethol Cymru', // Owner
         $base['author'], // Creator
         $base['url'], // Website en
         $base['url'], // Website cy
@@ -363,9 +394,9 @@ class Generate_csv {
         '', // Location (lat, lon)
         '', // Location description en
         '', // Location description cy
-        '', // Right Type 1
-        '', // Right Holder 1 EN
-        '', // Right Holder 1 CY
+        'http://creativecommons.org/licenses/by-nc-sa/4.0/', // Right Type 1
+        'The National Library of Wales', // Right Holder 1 EN
+        'Llyfrgell Genedlaethol Cymru', // Right Holder 1 CY
         '', // Begin Date 1
         '', // Right Type 2
         '', // Right Holder 2 EN
@@ -402,21 +433,27 @@ class Generate_csv {
       }else{
         $parent = $items[$key]['id'];
       }
+
+      if(empty($base['date'])) {
+        $date = '';
+      }else{
+        $date = $base['date'] . '-01-01';
+      }      
      
       array_push($list, array(
         $value['id'], // Image Identifier
         $parent, // Parent ID*
         '', // Page Order*
         $value['image'], // Image/File Name
-        $value['title'], // Title EN
-        $value['title'], // Title CY
-        $base['description'], // Description EN
-        $base['description'], // Description CY
+        trim($base['title']), // Title EN
+        trim($base['title']), // Title CY
+        trim($base['description']), // Description EN
+        trim($base['description']), // Description CY
         '', // Item type
         '', // Tags EN
         '', // Tags CY
-        $base['date'].'-01-01', // Date
-        '', // Owner
+        $date, // Date
+        'The National Library of Wales - Llyfrgell Genedlaethol Cymru', // Owner
         $base['author'], // Creator
         $base['url'], // Website en
         $base['url'], // Website cy
@@ -425,9 +462,9 @@ class Generate_csv {
         '', // Location (lat, lon)
         '', // Location description en
         '', // Location description cy
-        '', // Right Type 1
-        '', // Right Holder 1 EN
-        '', // Right Holder 1 CY
+        'http://creativecommons.org/licenses/by-nc-sa/4.0/', // Right Type 1
+        'The National Library of Wales', // Right Holder 1 EN
+        'Llyfrgell Genedlaethol Cymru', // Right Holder 1 CY
         '', // Begin Date 1
         '', // Right Type 2
         '', // Right Holder 2 EN
@@ -437,7 +474,7 @@ class Generate_csv {
         '', // Right Holder 3 EN
         '', // Right Holder 3 CY
         '', // Begin Date 3
-        '', // Addional rights        
+        '', // Addional rights         
       ));
     }
 

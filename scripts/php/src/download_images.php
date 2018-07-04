@@ -29,6 +29,7 @@ class download_images {
    */
   public function downloadLocalCopyOfImage($data)
   {
+    // print_r($data);
     // create an array of images to download
     $this->getListOfImages($data);
 
@@ -37,6 +38,14 @@ class download_images {
 
     // loop through all the images and download them to web_ready
     foreach($this->images as $image) {
+      
+
+      $imagePidAddr = str_replace('https://damsssl.llgc.org.uk/iiif/test/2.0/image/', '', $image);
+      
+      $imagePidArr = explode('/', $imagePidAddr);
+      // echo $imagePidArr[0]."\n";
+
+      $imagePath = 'http://fedoradev.llgc.org.uk/iiif/2.0/image/'.$imagePidArr[0].'/full/900,/0/default.jpg';
 
       // proxy rules
       $aContext = array(
@@ -48,18 +57,23 @@ class download_images {
 
       $cxContext = stream_context_create($aContext);
 
-      $sFile = file_get_contents($image);
+      $sFile = file_get_contents($imagePath);
 
       // set filename
-      $tempfilename = str_replace('http://dams.llgc.org.uk/iiif/test/2.0/image/', '', $image);
+      // $tempfilename = str_replace('http://dams.llgc.org.uk/iiif/test/2.0/image/', '', $image);
 
       // set filename
-      $filename = preg_replace("/(.*?)\/full\/(.*?)\,(.*?)\/0\/default\.jpg/", "$1", $tempfilename);
+      $filename = $imagePidArr[0];
 
       echo "Downloading $filename.jpg \n";
 
       // place image in web_ready
-      file_put_contents('llgc_' . $id . '/temp/' . $filename . '.jpg', $sFile);
+      // file_put_contents('llgc_' . $id . '/' . $filename . '.jpg', $sFile);
+
+      $dirIdArr = str_replace('https://damsssl.llgc.org.uk/iiif/2.0/', '', $id);
+      $dirIdPart = explode('/', $dirIdArr);
+
+      file_put_contents('./llgc_'.$dirIdPart[0].'/web_ready/'.$filename.'.jpg', $sFile);
 
     }
 

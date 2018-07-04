@@ -9,7 +9,7 @@ class get_manifest {
    * 
    * @var  string
    */
-  private $manifestURL = 'http://dams.llgc.org.uk/iiif/2.0/$LLGCID/manifest.json';
+  private $manifestURL = 'https://damsssl.llgc.org.uk/iiif/2.0/$LLGCID/manifest.json';
 
 
   /**
